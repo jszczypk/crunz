@@ -54,7 +54,8 @@ class Schedule implements PingableInterface
             $command .= ' ' . $this->compileParameters($parameters);
         }
 
-        $this->events[] = $event = new Event($this->id(), $command);
+        $id = $this->id();
+        $this->events[$id] = $event = new Event($id, $command);
 
         return $event;
     }
