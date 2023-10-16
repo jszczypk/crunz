@@ -48,13 +48,17 @@ class Schedule implements PingableInterface
      *
      * @return \Crunz\Event
      */
-    public function run($command, array $parameters = [])
+    public function run($command, array $parameters = [], ?string $id = null)
     {
         if (\is_string($command) && \count($parameters)) {
             $command .= ' ' . $this->compileParameters($parameters);
         }
 
-        $id = $this->id();
+        if (is_null($id)) {
+             $id = $this->id();
+        } elseif (\array_key_exists($id, $this->events)) {
+             throw new TaskAlreadyExistsException();
+        }
         $this->events[$id] = $event = new Event($id, $command);
 
         return $event;
